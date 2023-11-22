@@ -1,6 +1,6 @@
-import { footerLinks } from '@/constants'
-import Image from 'next/image'
-import Link from 'next/link';
+import { footerLinks } from "@/constants";
+import Image from "next/image";
+import Link from "next/link";
 
 type ColumnProps = {
   title: string;
