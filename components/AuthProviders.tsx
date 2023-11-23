@@ -44,4 +44,4 @@ const AuthProviders = () => {
   }
 }
 
-export default AuthProviders
+export default AuthProviders;

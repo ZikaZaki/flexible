@@ -79,4 +79,4 @@ const ProfileMenu = ({ session }: { session: SessionInterface }) => {
     )
 }
 
-export default ProfileMenu
+export default ProfileMenu;
