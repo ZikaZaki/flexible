@@ -1,7 +1,9 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { createNewProject, fetchToken } from "@/lib/actions";
 import { SessionInterface } from "@/common.types";
 import { categoryFilters } from "@/constants";
 import FormField from "./FormField";
@@ -14,7 +16,30 @@ type Props = {
 }
 
 const ProjectForm = ({ type, session }: Props ) => {
-  const handleFormSubmit = (e: React.FormEvent) => {};
+  
+  const router = useRouter();
+
+  const handleFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    setIsSubmitting(true);
+
+    const { token } = await fetchToken();
+
+    try {
+      if(type === "create") {
+
+        await createNewProject(form, session?.user?.id, token);
+
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -38,13 +63,13 @@ const ProjectForm = ({ type, session }: Props ) => {
   };
 
   const handleStateChange = (fieldName: string, value: string) => {
-    setform((prevState) => (
+    setForm((prevState) => (
       { ...prevState, [fieldName]: value}
     ))
   };
 
-  const [isSubmitting, setisSubmitting] = useState(false);
-  const [form, setform] = useState({
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [form, setForm] = useState({
     title: "",
     description: "",
     image: "",
@@ -60,7 +85,7 @@ const ProjectForm = ({ type, session }: Props ) => {
     >
 
       <div className="flexStart form_image-container">
-        <label htmlFor="poster" className="flexCenter form_image-label">
+        <label htmlFor="image" className="flexCenter form_image-label">
           {!form.image && "Choose a poster for your project"}
         </label>
         <input
